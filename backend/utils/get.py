@@ -2,15 +2,46 @@ import requests
 import os
 from model import PR, Commit, client, Plan
 import json
+from dotenv import load_dotenv
+
+load_dotenv()
+
 token = os.getenv("GITHUB_SECRET")
 
 def getPRs(owner, repo):
-    result = requests.get("https://api.github.com/repos/{}/{}/pulls".format(owner, repo)).json()
+    page = 1
+    result = []
+    while True:
+        temp = requests.get("https://api.github.com/repos/{}/{}/pulls?page={}".format(owner, repo, page), headers={"Authorization": "Bearer " + token}).json()
+        if len(temp) == 0:
+            break
+        result.extend(temp)
+        page += 1
+    
+    return [PR.model_validate(pr,from_attributes=False) for pr in result]
+
+def getPRbyBranch(owner, repo, branch):
+    page = 1
+    result = []
+
+    while True:
+        temp = requests.get("https://api.github.com/repos/{}/{}/pulls?page={}&base={}".format(owner, repo, page, branch), headers={"Authorization": "Bearer " + token}).json()
+        if len(temp) == 0:
+            break
+        result.extend(temp)
+        page += 1
 
     return [PR.model_validate(pr,from_attributes=False) for pr in result]
 
 def getCommits(owner, repo, pr_number):
-    result = requests.get("https://api.github.com/repos/{}/{}/pulls/{}/commits".format(owner, repo, pr_number)).json()
+    page = 1
+    result = []
+    while True:
+        temp = requests.get("https://api.github.com/repos/{}/{}/pulls/{}/commits?page={}".format(owner, repo, pr_number, page), headers={"Authorization": "Bearer " + token}).json()
+        if len(temp) == 0:
+            break
+        result.extend(temp)
+        page += 1
 
     return [Commit.model_validate(commit,from_attributes=False) for commit in result]
 
