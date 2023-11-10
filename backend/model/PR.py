@@ -9,6 +9,7 @@ class User(BaseModel):
 
 class PR(BaseModel):
     id: int
+    html_url: str
     title: str
     body: str
     created_at: str
