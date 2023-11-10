@@ -34,6 +34,14 @@ const StationList = (props) => {
                     created_at={station.pr.created_at}
                     draft={station.pr.draft}
                     state={station.pr.state}
+                    onHover={(p) =>
+                        p
+                            ? props.onHoverPoint({
+                                  point: props.points[index],
+                                  station: station.pr,
+                              })
+                            : props.onHoverPoint(null)
+                    }
                 />
             );
         });

@@ -3,6 +3,17 @@ import StationList from "../../components/station/StationList";
 import { useLocation } from "react-router-dom";
 import { getPoints } from "../../api/Station";
 
+const Profile = ({ avatar, name }) => (
+    <div style={{ display: "flex", alignItems: "center" }}>
+        <img
+            src={avatar}
+            alt="Profile Avatar"
+            style={{ width: "20px", height: "20px", borderRadius: "10px", marginRight: "5px" }}
+        />
+        <span>{name}</span>
+    </div>
+);
+
 const middlePoint = ({ points, idx }) => {
     if (points.length == idx + 1) {
         return <></>;
@@ -87,6 +98,7 @@ export const MainPage = () => {
     const [owner, setOwner] = useState();
     const [repo, setRepo] = useState();
     const [points, setPoints] = useState();
+    const [hoverPoint, setHoverPoint] = useState();
 
     useEffect(() => {
         const parts = location.pathname.split("/");
@@ -101,6 +113,8 @@ export const MainPage = () => {
                 setPoints(res);
             });
     }, [repo]);
+
+    console.log(hoverPoint);
 
     return (
         <div>
@@ -120,11 +134,45 @@ export const MainPage = () => {
                             <StationList
                                 points={elem}
                                 color={index === 0 ? "red" : index === 1 ? "blue" : index === 2 ? "green" : "yellow"}
+                                onHoverPoint={(p) => setHoverPoint(p)}
                             />
                         );
                     })}
-                {/* <use href="#info"></use>
-                <use href="#data" /> */}
+                {hoverPoint && (
+                    <svg id="data">
+                        <foreignObject
+                            x={hoverPoint.point["x"] + 500 + 40}
+                            y={hoverPoint.point["y"] + 200 - 80}
+                            fill="white"
+                            width="300"
+                            height="200"
+                            transform={`translate(${20}, ${20})`}
+                        >
+                            <body xmlns="http://www.w3.org/1999/xhtml">
+                                <div
+                                    style={{
+                                        padding: 20,
+                                        borderRadius: 20,
+                                        backgroundColor: "white",
+                                        border: "1px solid black",
+                                    }}
+                                >
+                                    <div>{hoverPoint.station.title}</div>
+                                    <br />
+                                    {hoverPoint.station.assignees.map((assignee) => (
+                                        <div key={assignee.login}>
+                                            <Profile avatar={assignee.avatar_url} name={assignee.login} />
+                                        </div>
+                                    ))}
+                                    <br />
+                                    <div>Time : {hoverPoint.station.created_at}</div>
+                                    <div>Draft : {hoverPoint.station.draft ? "true" : "false"}</div>
+                                    <div>State : {hoverPoint.station.state}</div>
+                                </div>
+                            </body>
+                        </foreignObject>
+                    </svg>
+                )}
             </svg>
         </div>
     );
