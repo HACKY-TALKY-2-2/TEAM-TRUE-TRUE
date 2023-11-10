@@ -5,8 +5,8 @@ import { getPRDatas } from "../../api/Station";
 import "./Station.css";
 
 const StationList = (props) => {
-    const [stationInfo, setStationInfo] = useState();
-    const [stationDiv, setStationDiv] = useState();
+  const [stationInfo, setStationInfo] = useState();
+  const [stationDiv, setStationDiv] = useState();
 
     useEffect(() => {
         getPRDatas("sparcs-kaist", "taxi-app").then((res) => {
@@ -37,10 +37,10 @@ const StationList = (props) => {
                 );
             });
 
-        setStationDiv(stations);
-    }, [stationInfo]);
+    setStationDiv(stations);
+  }, [stationInfo]);
 
-    return <>{stationDiv}</>;
+  return <>{stationDiv}</>;
 };
 
 export default StationList;

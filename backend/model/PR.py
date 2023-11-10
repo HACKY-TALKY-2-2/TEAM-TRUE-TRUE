@@ -10,23 +10,23 @@ class User(BaseModel):
 class PR(BaseModel):
     id: int
     html_url: str
-    title: str
-    body: str
+    title: Optional[str] = None
+    body: Optional[str] = None
     created_at: str
     meraged_at: Optional[str] = None
-    assignees: List[User]
+    assignees: Optional[List[User]] = None
     url: str
     draft: bool
     head: dict
     state: str
 
 class CommitDetail(BaseModel):
-    message: str
+    message: Optional[str] = None
 
 class Commit(BaseModel):
     sha: str
     url: str
-    message: str = None
+    message: Optional[str] = None
     author: User
     committer: User
 
