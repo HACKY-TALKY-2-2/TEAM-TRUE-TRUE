@@ -78,8 +78,16 @@ for ord in order:
     path_positive, path_negative = get_next_point(ord, path, coords)
     path[ord] = (path_positive, path_negative, direction)
 
+result = []
+
 for p in path:
     pos_path, neg_path, _ = p
-    print(list(reversed(neg_path[1:])) + pos_path)
+    result = list(reversed(neg_path[1:])) + pos_path
 
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 5))
+plt.scatter([x for x, y in result], [y for x, y in result], s=20)
+
+plt.show()
 
