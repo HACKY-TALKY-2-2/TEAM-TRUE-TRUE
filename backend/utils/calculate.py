@@ -85,9 +85,10 @@ def generate_coords(prs, users):
     result = []
 
     for p in range(len(path)):
+        temp = []
         for i in range(len(path[p][0]) - 1):
-            result.append(PRCoord(x = path[p][0][i][0], y = path[p][0][i][1], ord = p, pr = user_pr[p][i]))
-
+            temp.append(PRCoord(x = path[p][0][i][0], y = path[p][0][i][1], ord = p, pr = user_pr[p][i]))
+        result.append(temp)
     return result
 
 

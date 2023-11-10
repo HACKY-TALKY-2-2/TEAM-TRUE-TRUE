@@ -53,6 +53,6 @@ async def updatePlan(owner: str = ..., repo: str = ...):
     await updatePlan(owner, repo)
     return {"status": "ok"}
 
-@app.get("/point/{owner}/{repo}/{branch}", response_model=List[PRCoord], tags=["point"])
+@app.get("/point/{owner}/{repo}/{branch}", response_model=List[List[PRCoord]], tags=["point"])
 async def PRPoint(owner: str = ..., repo: str = ..., branch: str = ...):
     return getPoints(owner, repo, branch)
