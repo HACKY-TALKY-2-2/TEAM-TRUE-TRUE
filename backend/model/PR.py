@@ -19,7 +19,19 @@ class PR(BaseModel):
     head: dict
     base: dict
 
-class PRs(BaseModel):
-    List[PR]
+class CommitDetail(BaseModel):
+    message: str
+
+class Commit(BaseModel):
+    sha: str
+    url: str
+    message: str = None
+    author: User
+    committer: User
+
+    def __init__(self, **data):
+        data["message"] = data["commit"]["message"]
+        super().__init__(**data)
+
 
 

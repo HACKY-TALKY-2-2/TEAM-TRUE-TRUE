@@ -1,1 +1,1 @@
-from .get import getPRs
+from .get import getPRs, getCommits

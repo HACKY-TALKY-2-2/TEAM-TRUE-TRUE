@@ -1,1 +1,1 @@
-from .PR import PRs, PR
+from .PR import PR, Commit
