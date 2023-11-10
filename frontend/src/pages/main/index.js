@@ -108,4 +108,5 @@ export const MainPage = () => {
       </svg>
     </div>
   );
+
 };

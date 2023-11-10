@@ -34,12 +34,11 @@ const Station = (props) => {
                 cx={props.px}
                 cy={props.py}
                 fill="#FFFFFF"
-                id="역_방화"
                 r="10"
                 stroke={props.strokeColor}
                 strokeWidth="5"
             />
-            <text
+            {/* <text
                 x={props.px}
                 y={props.py + 20}
                 fill="#000000"
@@ -48,7 +47,7 @@ const Station = (props) => {
                 fontSize={12}
             >
                 {props.prTitle}
-            </text>
+            </text> */}
 
             {isHovered && (
                 <>
@@ -82,9 +81,7 @@ const Station = (props) => {
                             ))}
                             <br />
                             <div>Time : {props.created_at}</div>
-                            <br />
-                            <div>draft : {props.draft ? "true" : "false"}</div>
-                            <br />
+                            <div>Draft : {props.draft ? "true" : "false"}</div>
                             <div>State : {props.state}</div>
                         </body>
                     </foreignObject>
