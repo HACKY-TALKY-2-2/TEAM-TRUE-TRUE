@@ -1,14 +1,14 @@
 import math
 import random
+import matplotlib.pyplot as plt
 
-seed = "12AK"
-random.seed(seed)
+seed = "122AK"
 jump_generate = 20
-jump_path = 10
+jump_path = 15
 
 def polar_to_cartesian(r, theta):
-    x = r * math.cos(theta)
-    y = r * math.sin(theta)
+    x = r * math.cos(math.pi * theta / 180)
+    y = r * math.sin(math.pi * theta / 180)
     return x, y
 
 def randomize_coordinate(x, y, range):
@@ -20,8 +20,8 @@ def randomize_coordinate(x, y, range):
 
     return randomized_x, randomized_y
 
-def skew_ratio(distance):
-    return (math.e ** -(distance/1000))
+# def skew_ratio(distance):
+#     return (math.e ** -(distance/1000))
 
 def find_closest_point(point, cluster, exlude_list):
     closest_point = None
@@ -33,17 +33,17 @@ def find_closest_point(point, cluster, exlude_list):
             closest_point = other_point
     return closest_point, closest_distance
 
-width, height = 200, 100
+width, height = 400, 400
 center = (width/2, height/2)
 radius = (width ** 2 + height ** 2) ** 0.5 / 2
 
 coords = [(0, 0)]
 random.seed(seed)
-for ind in range(0, int(radius), jump_generate):
-    count = ind // 5 + 1
-    for ang in range(0, 360, 360 //count):
+for ind in range(jump_generate, int(radius), jump_generate):
+    count = ind // 18 + 10
+    for ang in range(0, 350, 360 //count):
         tx, ty = polar_to_cartesian(ind, ang)
-        x, y = randomize_coordinate(tx, ty, 20)
+        x, y = randomize_coordinate(tx, ty, 12)
         coords.append((x, y))
 
 def get_next_point(personindex, path, coords):
@@ -51,8 +51,8 @@ def get_next_point(personindex, path, coords):
     path_negative = path[personindex][1]
     direction = path[personindex][2]
 
-    direction_pos = direction if len(path_positive) <= 1 else math.atan2(path_positive[-1][1] - path_positive[-2][1], path_positive[-1][0] - path_positive[-2][0])
-    direction_neg = direction if len(path_negative) <= 1 else math.atan2(path_negative[-1][1] - path_negative[-2][1], path_negative[-1][0] - path_negative[-2][0])
+    direction_pos = (direction if len(path_positive) <= 1 else math.atan2(path_positive[-1][1] - path_positive[-2][1], path_positive[-1][0] - path_positive[-2][0]) + (2 * direction)) / 3
+    direction_neg = (direction if len(path_negative) <= 1 else math.atan2(path_negative[-1][1] - path_negative[-2][1], path_negative[-1][0] - path_negative[-2][0]) + (2 * direction)) / 3
 
     positive_jump = tuple(a + b for a, b in zip(path_positive[-1], (jump_path * math.cos(direction_pos), jump_path * math.sin(direction_pos))))
     negative_jump = tuple(a - b for a, b in zip(path_negative[-1], (jump_path * math.cos(direction_neg), jump_path * math.sin(direction_neg))))
@@ -68,8 +68,8 @@ def get_next_point(personindex, path, coords):
     return path_positive, path_negative
 
 random.seed(seed)
-personcnt = 2
-order = [0,0,0,0,1,1,1,0,1,1,0,0,1,1,1,1]
+personcnt = 3
+order = [0,0,0,0,2,1,1,1,0,1,2,2,2,2,2,1,0,0,1,1,1,1,0,0,0,1,1,0,0,1]
 path = [([(0, 0)], [(0, 0)], random.uniform(0, math.pi)) for i in range(personcnt)]
 
 random.seed(seed)
@@ -78,16 +78,17 @@ for ord in order:
     path_positive, path_negative = get_next_point(ord, path, coords)
     path[ord] = (path_positive, path_negative, direction)
 
-result = []
+plt.figure(figsize=(10, 5))
+cnt = 0
+
+plt.scatter([x for x, y in coords], [y for x, y in coords], s=20, c='black')
 
 for p in path:
     pos_path, neg_path, _ = p
     result = list(reversed(neg_path[1:])) + pos_path
-
-import matplotlib.pyplot as plt
-
-plt.figure(figsize=(10, 5))
-plt.scatter([x for x, y in result], [y for x, y in result], s=20)
+    print(result)
+    plt.scatter([x for x, y in result], [y for x, y in result], s=20, c='red' if cnt == 0 else ('blue' if cnt == 1 else 'green'))
+    cnt += 1
 
 plt.show()
 
