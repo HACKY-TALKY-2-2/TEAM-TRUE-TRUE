@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from dotenv import load_dotenv
-from utils import getPRs, getCommits, updatePlan, getPRbyBranch
-from model import PR, Commit, client, Plan
+from utils import getPRs, getCommits, updatePlan, getPRbyBranch, getPoints
+from model import PR, Commit, client, Plan, PRCoord
 from typing import List, Dict, Union, Optional
 from contextlib import asynccontextmanager
 import os
@@ -52,3 +52,7 @@ async def getPlan(owner: str = ..., repo: str = ...):
 async def updatePlan(owner: str = ..., repo: str = ...):
     await updatePlan(owner, repo)
     return {"status": "ok"}
+
+@app.get("/point/{owner}/{repo}/{branch}", response_model=List[PRCoord], tags=["point"])
+async def PRPoint(owner: str = ..., repo: str = ..., branch: str = ...):
+    return getPoints(owner, repo, branch)

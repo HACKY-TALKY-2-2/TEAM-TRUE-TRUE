@@ -1,1 +1,1 @@
-from .get import getPRs, getCommits, updatePlan, getPRbyBranch
+from .get import getPRs, getCommits, updatePlan, getPRbyBranch, getPoints

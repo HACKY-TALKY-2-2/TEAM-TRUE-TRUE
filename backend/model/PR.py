@@ -7,6 +7,8 @@ class User(BaseModel):
     login: str
     avatar_url: str = None
 
+class Repo(BaseModel):
+    ref: str
 class PR(BaseModel):
     id: int
     html_url: str
@@ -14,14 +16,22 @@ class PR(BaseModel):
     body: Optional[str] = None
     created_at: str
     meraged_at: Optional[str] = None
+    user: User
     assignees: Optional[List[User]] = None
     url: str
     draft: bool
-    head: dict
+    head: Repo
     state: str
+
 
 class CommitDetail(BaseModel):
     message: Optional[str] = None
+
+class PRCoord(BaseModel):
+    x : float
+    y : float
+    ord : int
+    pr : PR
 
 class Commit(BaseModel):
     sha: str
