@@ -5,42 +5,51 @@ import { getPRDatas } from "../../api/Station";
 import "./Station.css";
 
 const StationList = (props) => {
-  const [stationInfo, setStationInfo] = useState();
-  const [stationDiv, setStationDiv] = useState();
+    const [stationInfo, setStationInfo] = useState();
+    const [stationDiv, setStationDiv] = useState();
+
+    // useEffect(() => {
+    //     setStationInfo(getPRdata());
+    //     // getPRDatas("sparcs-kaist", "taxi-app").then((res) => {
+    //     //     console.log(res);
+    //     //     setStationInfo(res);
+    //     // });
+    // }, []);
 
     useEffect(() => {
-        getPRDatas("sparcs-kaist", "taxi-app").then((res) => {
-            console.log(res);
-            setStationInfo(res);
-        });
-    }, []);
-
-    useEffect(() => {
-        console.log(stationInfo);
+        // console.log(props.color);
+        // console.log(props.points);
         let stations = [];
-        stationInfo &&
-            stationInfo.map((station, index) => {
-                stations.push(
-                    <Station
-                        key={station.id}
-                        link={station.html_url}
-                        px={props.points[index][0] ? props.points[index][0] : 0}
-                        py={props.points[index][1] ? props.points[index][1] : 0}
-                        prTitle={station.title}
-                        strokeColor="red"
-                        body={station.body}
-                        assignees={station.assignees}
-                        created_at={station.created_at}
-                        draft={station.draft}
-                        state={station.state}
-                    />
-                );
-            });
+        props.points.map((station, index) => {
+            stations.push(
+                <Station
+                    key={station.pr.id}
+                    link={station.pr.html_url}
+                    px={props.points[index]["x"] + 500}
+                    py={props.points[index]["y"] + 200}
+                    prTitle={station.pr.title}
+                    strokeColor={props.color}
+                    body={station.pr.body}
+                    assignees={station.pr.assignees}
+                    created_at={station.pr.created_at}
+                    draft={station.pr.draft}
+                    state={station.pr.state}
+                    onHover={(p) =>
+                        p
+                            ? props.onHoverPoint({
+                                  point: props.points[index],
+                                  station: station.pr,
+                              })
+                            : props.onHoverPoint(null)
+                    }
+                />
+            );
+        });
 
-    setStationDiv(stations);
-  }, [stationInfo]);
+        setStationDiv(stations);
+    }, [stationInfo]);
 
-  return <>{stationDiv}</>;
+    return <>{stationDiv}</>;
 };
 
 export default StationList;

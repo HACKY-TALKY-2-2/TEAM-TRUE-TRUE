@@ -1,14 +1,30 @@
+import React, { useEffect, useState } from "react";
 import StationList from "../../components/station/StationList";
+import { useLocation } from "react-router-dom";
+import { getPoints } from "../../api/Station";
 
-export const Line = ({ points, color }) => {
-  return points.map((elem, i) => {
-    if (points.length === i + 1) {
-      return null;
+const Profile = ({ avatar, name }) => (
+    <div style={{ display: "flex", alignItems: "center" }}>
+        <img
+            src={avatar}
+            alt="Profile Avatar"
+            style={{ width: "20px", height: "20px", borderRadius: "10px", marginRight: "5px" }}
+        />
+        <span>{name}</span>
+    </div>
+);
+
+const middlePoint = ({ points, idx }) => {
+    if (points.length == idx + 1) {
+        return <></>;
     }
-    let p1 = points[i];
-    let p2 = points[i + 1];
-    let [p1x, p1y] = p1;
-    let [p2x, p2y] = p2;
+    let p1 = points[idx];
+    let p2 = points[idx + 1];
+
+    let p1x = p1["x"] + 500;
+    let p1y = p1["y"] + 200;
+    let p2x = p2["x"] + 500;
+    let p2y = p2["y"] + 200;
     let x1 = p1x;
     let y1 = p1y;
     let x2;
@@ -18,95 +34,146 @@ export const Line = ({ points, color }) => {
     let flag = Math.random([0, 1], 1);
 
     if (p1x > p2x) {
-      [p1x, p2x] = [p2x, p1x];
-      [p1y, p2y] = [p2y, p1y];
+        [p1x, p2x] = [p2x, p1x];
+        [p1y, p2y] = [p2y, p1y];
     }
 
     if (Math.abs(p1x - p2x) > Math.abs(p1y - p2y)) {
-      //1,2
-      if (flag) {
-        x2 = p2y > p1y ? p2x - (p2y - p1y) : p2x - (p1y - p2y);
-        y2 = p1y;
-      } else {
-        x2 = p2y > p1y ? p1x + (p2y - p1y) : p1x + (p1y - p2y);
-        y2 = p2y;
-      }
+        //1,2
+        if (flag) {
+            x2 = p2y > p1y ? p2x - (p2y - p1y) : p2x - (p1y - p2y);
+            y2 = p1y;
+        } else {
+            x2 = p2y > p1y ? p1x + (p2y - p1y) : p1x + (p1y - p2y);
+            y2 = p2y;
+        }
     } else {
-      if (flag) {
-        x2 = p1x;
-        y2 = p2y > p1y ? p2y - (p2x - p1x) : p2y + (p2x - p1x);
-      } else {
-        x2 = p2x;
-        y2 = p2y > p1y ? p1y + (p2x - p1x) : p1y - (p2x - p1x);
-      }
+        if (flag) {
+            x2 = p1x;
+            y2 = p2y > p1y ? p2y - (p2x - p1x) : p2y + (p2x - p1x);
+        } else {
+            x2 = p2x;
+            y2 = p2y > p1y ? p1y + (p2x - p1x) : p1y - (p2x - p1x);
+        }
     }
-
-    return (
-      <polyline
-        points={`${x1},${y1} ${x2},${y2} ${x3},${y3}`}
-        style={{ fill: "transparent", stroke: color, strokeWidth: 5 }}
-        stroke-linejoin="round"
-      />
-    );
-  });
+    return [
+        [x1, y1],
+        [x2, y2],
+        [x3, y3],
+    ];
+};
+export const Line = ({ points, color }) => {
+    if (points.length === 0 || points.length === 1) {
+        return null;
+    }
+    if (points.length === 2) {
+        const point_list = middlePoint({ points: points, idx: 0 });
+        const point_props = point_list.map((elem) => `${elem[0]},${elem[1]}`).join(" ");
+        return (
+            <polyline
+                points={point_props}
+                style={{ fill: "transparent", stroke: color, strokeWidth: 5 }}
+                stroke-linejoin="round"
+            />
+        );
+    } else {
+        const point_list_temp = points.map((_, i) => middlePoint({ points: points, idx: i }));
+        const last_point = point_list_temp[point_list_temp.length - 1];
+        const point_list_temp2 = point_list_temp.slice(0, point_list_temp.length - 1);
+        const point_list = point_list_temp2.map((elem) => elem.slice(0, -1)).flat();
+        point_list.push(last_point);
+        const point_props = point_list.map((elem) => `${elem[0]},${elem[1]}`).join(" ");
+        return (
+            <polyline
+                points={point_props}
+                style={{ fill: "transparent", stroke: color, strokeWidth: 5 }}
+                stroke-linejoin="round"
+            />
+        );
+    }
 };
 
 export const MainPage = () => {
-  const points = [
-    [
-      [400 + 99.64524229439675, 400 + 19.67545845950927],
-      [400 + 89.84830456393799, 400 + 12.776051209018938],
-      [400 + 65.62304126915963, 400 + 7.395016755166458],
-      [400 + 60.78194168112991, 400 + 1.374479976187919],
-      [400 + 31.97623002737534, 400 + 2.6376258521193083],
-      [400 + 0, 400 + 0],
-      [400 + 1.0213044478383058, 400 + 1.3894475138629023],
-      [400 + 8.930299818590514, 400 + 11.90441715618305],
-      [400 + 25.037427432707098, 400 + 11.253458278074818],
-      [400 + 41.344088097135426, 400 + 1.3840477059839624],
-      [400 + 63.83458705987676, 400 + 1.385809610291332],
-      [400 + 83.46700717353431, 400 + 14.747222742833182],
-      [400 + 89.54818239557548, 400 + 17.49103644587501],
-    ],
-    [
-      [300 + 14.594982393035668, 300 + 38.51211908859147],
-      [300 + 6.894401258036339, 300 + 19.28081210271262],
-      [300 + 0, 300 + 0],
-      [300 + 16.513254171234024, 300 + 22.90625482500625],
-      [300 + 15.357796325940374, 300 + 19.36706265175833],
-      [300 + 24.787318950246632, 300 + 25.353620153185034],
-      [300 + 33.90903119015979, 300 + 10.929303293527134],
-      [300 + -38.775583301307975, 300 + 36.324625603699836],
-      [300 + -64.84392302812631, 300 + 34.555657714228026],
-      [300 + -65.54778433194878, 300 + 45.70890415925685],
-      [300 + -89.02240383665772, 300 + 35.407326365917584],
-      [300 + -75.35113211095293, 300 + 55.73993333475999],
-      [300 + -87.38560227164808, 300 + 69.74865672824616],
-    ],
-    [
-      [200 + 85.68973151046265, 200 + -50.8029184326689],
-      [200 + 49.979432554076965, 200 + -37.23222776245787],
-      [200 + 39.175402387885164, 200 + -32.5183379831161],
-      [200 + 34.439234186250204, 200 + -32.22818718973855],
-      [200 + 24.055183718008678, 200 + -38.97829761842981],
-      [200 + 8.135953907763405, 200 + -21.211060400653224],
-      [200 + 0, 200 + 0],
-    ],
-  ];
+    const location = useLocation();
+    const [owner, setOwner] = useState();
+    const [repo, setRepo] = useState();
+    const [points, setPoints] = useState();
+    const [hoverPoint, setHoverPoint] = useState();
 
-  return (
-    <div>
-      <svg height="1800" width="1000">
-        {points.map((elem) => {
-          return (
-            <>
-              <Line points={elem} color={"red"} />
-              <StationList points={elem} />
-            </>
-          );
-        })}
-      </svg>
-    </div>
-  );
+    useEffect(() => {
+        const parts = location.pathname.split("/");
+        setOwner(parts[1]);
+        setRepo(parts[2]);
+    }, [location]);
 
+    useEffect(() => {
+        owner &&
+            repo &&
+            getPoints(owner, repo, "main").then((res) => {
+                setPoints(res);
+            });
+    }, [repo]);
+
+    console.log(hoverPoint);
+
+    return (
+        <div>
+            <svg height="1800" width="1000">
+                {points &&
+                    points.map((elem, index) => {
+                        return (
+                            <Line
+                                points={elem}
+                                color={index === 0 ? "red" : index === 1 ? "blue" : index === 2 ? "green" : "yellow"}
+                            />
+                        );
+                    })}
+                {points &&
+                    points.map((elem, index) => {
+                        return (
+                            <StationList
+                                points={elem}
+                                color={index === 0 ? "red" : index === 1 ? "blue" : index === 2 ? "green" : "yellow"}
+                                onHoverPoint={(p) => setHoverPoint(p)}
+                            />
+                        );
+                    })}
+                {hoverPoint && (
+                    <svg id="data">
+                        <foreignObject
+                            x={hoverPoint.point["x"] + 500 + 40}
+                            y={hoverPoint.point["y"] + 200 - 80}
+                            fill="white"
+                            width="300"
+                            height="200"
+                            transform={`translate(${20}, ${20})`}
+                        >
+                            <body xmlns="http://www.w3.org/1999/xhtml">
+                                <div
+                                    style={{
+                                        padding: 20,
+                                        borderRadius: 20,
+                                        backgroundColor: "white",
+                                        border: "1px solid black",
+                                    }}
+                                >
+                                    <div>{hoverPoint.station.title}</div>
+                                    <br />
+                                    {hoverPoint.station.assignees.map((assignee) => (
+                                        <div key={assignee.login}>
+                                            <Profile avatar={assignee.avatar_url} name={assignee.login} />
+                                        </div>
+                                    ))}
+                                    <br />
+                                    <div>Time : {hoverPoint.station.created_at}</div>
+                                    <div>Draft : {hoverPoint.station.draft ? "true" : "false"}</div>
+                                    <div>State : {hoverPoint.station.state}</div>
+                                </div>
+                            </body>
+                        </foreignObject>
+                    </svg>
+                )}
+            </svg>
+        </div>
+    );
 };
