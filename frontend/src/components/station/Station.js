@@ -34,9 +34,9 @@ const Station = (props) => {
                 cx={props.px}
                 cy={props.py}
                 fill="#FFFFFF"
-                r="10"
+                r="6"
                 stroke={props.strokeColor}
-                strokeWidth="5"
+                strokeWidth="3"
             />
             {/* <text
                 x={props.px}
@@ -50,7 +50,7 @@ const Station = (props) => {
             </text> */}
 
             {isHovered && (
-                <>
+                <svg id="info">
                     <rect
                         x={props.px + 40}
                         y={props.py - 80}
@@ -62,31 +62,33 @@ const Station = (props) => {
                         stroke="black"
                         strokeWidth="2"
                     />
-
-                    <foreignObject
-                        x={props.px + 40}
-                        y={props.py - 80}
-                        fill="white"
-                        width="300"
-                        height="200"
-                        transform={`translate(${20}, ${20})`}
-                    >
-                        <body xmlns="http://www.w3.org/1999/xhtml">
-                            <div>{props.prTitle}</div>
-                            <br />
-                            {props.assignees.map((assignee) => (
-                                <div key={assignee.login}>
-                                    <Profile avatar={assignee.avatar_url} name={assignee.login} />
-                                </div>
-                            ))}
-                            <br />
-                            <div>Time : {props.created_at}</div>
-                            <div>Draft : {props.draft ? "true" : "false"}</div>
-                            <div>State : {props.state}</div>
-                        </body>
-                    </foreignObject>
-                </>
+                    <svg id="data">
+                        <foreignObject
+                            x={props.px + 40}
+                            y={props.py - 80}
+                            fill="white"
+                            width="300"
+                            height="200"
+                            transform={`translate(${20}, ${20})`}
+                        >
+                            <body xmlns="http://www.w3.org/1999/xhtml">
+                                <div>{props.prTitle}</div>
+                                <br />
+                                {props.assignees.map((assignee) => (
+                                    <div key={assignee.login}>
+                                        <Profile avatar={assignee.avatar_url} name={assignee.login} />
+                                    </div>
+                                ))}
+                                <br />
+                                <div>Time : {props.created_at}</div>
+                                <div>Draft : {props.draft ? "true" : "false"}</div>
+                                <div>State : {props.state}</div>
+                            </body>
+                        </foreignObject>
+                    </svg>
+                </svg>
             )}
+            <use></use>
         </svg>
     );
 };

@@ -17,37 +17,26 @@ const StationList = (props) => {
     // }, []);
 
     useEffect(() => {
-        console.log(props.owner, props.repo);
-        props.owner &&
-            props.repo &&
-            getPRDatas(props.owner, props.repo).then((res) => {
-                console.log(res);
-                setStationInfo(res);
-            });
-    }, [props.owner, props.repo]);
-
-    useEffect(() => {
         // console.log(props.color);
         // console.log(props.points);
         let stations = [];
-        stationInfo &&
-            stationInfo.map((station, index) => {
-                stations.push(
-                    <Station
-                        key={station.id}
-                        link={station.html_url}
-                        px={props.points[index] ? props.points[index][0] : -1}
-                        py={props.points[index] ? props.points[index][1] : -1}
-                        prTitle={station.title}
-                        strokeColor={props.color}
-                        body={station.body}
-                        assignees={station.assignees}
-                        created_at={station.created_at}
-                        draft={station.draft}
-                        state={station.state}
-                    />
-                );
-            });
+        props.points.map((station, index) => {
+            stations.push(
+                <Station
+                    key={station.pr.id}
+                    link={station.pr.html_url}
+                    px={props.points[index]["x"] + 500}
+                    py={props.points[index]["y"] + 200}
+                    prTitle={station.pr.title}
+                    strokeColor={props.color}
+                    body={station.pr.body}
+                    assignees={station.pr.assignees}
+                    created_at={station.pr.created_at}
+                    draft={station.pr.draft}
+                    state={station.pr.state}
+                />
+            );
+        });
 
         setStationDiv(stations);
     }, [stationInfo]);

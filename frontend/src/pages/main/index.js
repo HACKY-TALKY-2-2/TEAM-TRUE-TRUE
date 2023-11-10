@@ -99,7 +99,6 @@ export const MainPage = () => {
             repo &&
             getPoints(owner, repo, "main").then((res) => {
                 setPoints(res);
-                console.log(res);
             });
     }, [repo]);
 
@@ -109,24 +108,23 @@ export const MainPage = () => {
                 {points &&
                     points.map((elem, index) => {
                         return (
-                            <>
-                                <Line
-                                    points={elem}
-                                    color={
-                                        index === 0 ? "red" : index === 1 ? "blue" : index === 2 ? "green" : "yellow"
-                                    }
-                                />
-                                <StationList
-                                    points={elem}
-                                    color={
-                                        index === 0 ? "red" : index === 1 ? "blue" : index === 2 ? "green" : "yellow"
-                                    }
-                                    owner={owner}
-                                    repo={repo}
-                                />
-                            </>
+                            <Line
+                                points={elem}
+                                color={index === 0 ? "red" : index === 1 ? "blue" : index === 2 ? "green" : "yellow"}
+                            />
                         );
                     })}
+                {points &&
+                    points.map((elem, index) => {
+                        return (
+                            <StationList
+                                points={elem}
+                                color={index === 0 ? "red" : index === 1 ? "blue" : index === 2 ? "green" : "yellow"}
+                            />
+                        );
+                    })}
+                {/* <use href="#info"></use>
+                <use href="#data" /> */}
             </svg>
         </div>
     );
