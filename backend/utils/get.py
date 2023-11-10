@@ -79,4 +79,4 @@ def getPoints(owner, repo, branch):
         if pr.user not in userList:
             userList.append(pr.user)
     
-    return generate_coords(result, userList)
+    return generate_coords(result, userList, seed=f'{owner}{repo}')

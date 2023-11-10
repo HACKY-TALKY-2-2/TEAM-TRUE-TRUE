@@ -4,9 +4,9 @@ from model import PR, PRCoord
 from time import sleep
 
 seed = "1A13222212K"
-init_location_sigma = 10
-jump_path = 15
-merge_criteria = 5
+init_location_sigma = 30
+jump_path = 45
+merge_criteria = 15
 
 def polar_to_cartesian(r, theta):
     x = r * math.cos(math.pi * theta / 180)
