@@ -24,46 +24,6 @@ const Station = (props) => {
 
     return (
         <svg>
-            {isHovered && (
-                <>
-                    <rect
-                        x={props.px + 40}
-                        y={props.py - 80}
-                        width="300"
-                        height="200"
-                        rx="20" // x 방향의 모서리 반지름
-                        ry="20" // y 방향의 모서리 반지름
-                        fill="white"
-                        stroke="black"
-                        strokeWidth="2"
-                    />
-
-                    <foreignObject
-                        x={props.px + 40}
-                        y={props.py - 80}
-                        fill="white"
-                        width="300"
-                        height="200"
-                        transform={`translate(${20}, ${20})`}
-                    >
-                        <body xmlns="http://www.w3.org/1999/xhtml">
-                            <div>Assignees:</div>
-                            {props.assignees.map((assignee) => (
-                                <div key={assignee.login}>
-                                    <Profile avatar={assignee.avatar_url} name={assignee.login} />
-                                </div>
-                            ))}
-                            <br />
-                            <div>Time : {props.created_at}</div>
-                            <br />
-                            <div>draft : {props.draft ? "true" : "false"}</div>
-                            <br />
-                            <div>Stage : {props.state}</div>
-                        </body>
-                    </foreignObject>
-                </>
-            )}
-
             <circle
                 className="station"
                 onClick={() => {
@@ -89,6 +49,47 @@ const Station = (props) => {
             >
                 {props.prTitle}
             </text>
+
+            {isHovered && (
+                <>
+                    <rect
+                        x={props.px + 40}
+                        y={props.py - 80}
+                        width="300"
+                        height="200"
+                        rx="20" // x 방향의 모서리 반지름
+                        ry="20" // y 방향의 모서리 반지름
+                        fill="white"
+                        stroke="black"
+                        strokeWidth="2"
+                    />
+
+                    <foreignObject
+                        x={props.px + 40}
+                        y={props.py - 80}
+                        fill="white"
+                        width="300"
+                        height="200"
+                        transform={`translate(${20}, ${20})`}
+                    >
+                        <body xmlns="http://www.w3.org/1999/xhtml">
+                            <div>{props.prTitle}</div>
+                            <br />
+                            {props.assignees.map((assignee) => (
+                                <div key={assignee.login}>
+                                    <Profile avatar={assignee.avatar_url} name={assignee.login} />
+                                </div>
+                            ))}
+                            <br />
+                            <div>Time : {props.created_at}</div>
+                            <br />
+                            <div>draft : {props.draft ? "true" : "false"}</div>
+                            <br />
+                            <div>State : {props.state}</div>
+                        </body>
+                    </foreignObject>
+                </>
+            )}
         </svg>
     );
 };
