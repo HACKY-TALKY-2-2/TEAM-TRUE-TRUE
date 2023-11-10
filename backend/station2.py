@@ -3,7 +3,7 @@ import random
 import matplotlib.pyplot as plt
 from time import sleep
 
-seed = "1A132212K"
+seed = "1A13222212K"
 jump_generate = 20
 jump_path = 15
 
@@ -27,8 +27,11 @@ radius = (width ** 2 + height ** 2) ** 0.5 / 2
 
 random.seed(seed)
 personcnt = 3
-order = [0,0,0,0,2,1,1,1,0,1,2,2,2,2,2,1,0,0,1,1,1,1,0,0,0,1,1,0,0,1]
+order = [0,0,2,0,0,2,1,1,1,0,1,2,2,2,2,2,1,0,0,1,1,1,1,0,0,0,1,1,0,0,1]
 path = [([(0, 0)], random.uniform(0, math.pi)) for i in range(personcnt)]
+
+def next_point(src_point, slope, distance):
+    return (src_point[0] + distance * math.cos(slope), src_point[1] + distance * math.sin(slope))
 
 def get_next_point(personindex, path):
     path_comp = path[personindex][0]
@@ -38,14 +41,16 @@ def get_next_point(personindex, path):
     #pos extend
     if (end_point_distance_pos < end_point_distance_neg):
         if (len(path_comp) > 1):
-            new_point = (2 * path_comp[0][0] - path_comp[1][0], 2 * path_comp[0][1] - path_comp[1][1])
+            slope = math.atan2(path_comp[0][1] - path_comp[1][1], path_comp[0][0] - path_comp[1][0])
+            new_point = next_point(path_comp[0], slope + random.uniform(-math.pi/12, math.pi/12), jump_path + random.uniform(-jump_path/3, jump_path/3))
         else:
             new_point = (path_comp[0][0] + jump_path * math.cos(slope), path_comp[0][0] + jump_path * math.sin(slope))
         path_comp.insert(0, new_point)
     #neg extend
     else:
         if (len(path_comp) > 1):
-            new_point = (2 * path_comp[-1][0] - path_comp[-2][0], 2 * path_comp[-1][1] - path_comp[-2][1])
+            slope = math.atan2(path_comp[-1][1] - path_comp[-2][1], path_comp[-1][0] - path_comp[-2][0])
+            new_point = next_point(path_comp[-1], slope + random.uniform(-math.pi/12, math.pi/12), jump_path + random.uniform(-jump_path/3, jump_path/3))
         else:
             new_point = (path_comp[0][0] - jump_path * math.cos(slope), path_comp[0][0] - jump_path * math.sin(slope))
         path_comp.append(new_point)
@@ -62,7 +67,6 @@ plt.figure(figsize=(7, 7))
 cnt = 0
 
 for p, _ in path:
-    print(p)
     plt.scatter([x for x, y in p], [y for x, y in p], s=20, c='red' if cnt == 0 else ('blue' if cnt == 1 else 'green'))
     plt.plot([x for x, y in p], [y for x, y in p], c='red' if cnt == 0 else ('blue' if cnt == 1 else 'green'))
     cnt += 1
