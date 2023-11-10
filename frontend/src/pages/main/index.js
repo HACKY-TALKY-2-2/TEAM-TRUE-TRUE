@@ -93,6 +93,9 @@ export const Line = ({ points, color }) => {
     }
 };
 
+const chatcolors = ["red", "blue", "green", "#759C69", "#E68CB9", "#6E665D", "#5D7ED6", "#4A66C5", "#72AEC3", "#67A6C5", "#A45C3F", "#7A93AA", "#FA9400", "#BA2710", "#5E82C4", "#79402A", "#723E47", "#DC814E", "#B85F91", "#499370", "#78A569", "#E59C1B", "#519D3C", "#8E5897", "#868544", "#5BA688", "#FFE84E", "#535f2D", "#CE8E00", "#91A543", "#797C7f", "#DBDD6B", "#4C69C4", "#CE5EC9", "#FF7800", "#898C94", "#CE5155", "#4B8D9C", "#2F388B", "#BE49BC", "#3A5996", "#7F499F", "#C6936B", "#B49EA9", "#9C459E", "#D9B6BA", "#7865c2", "#CA88A3", "#B87C4B", "#CA5374", "#5888C8", "#796552", "#E1DE19", "#A88C82", "#aeb1bd", "#D34944", "#ACABAE", "#EFB422", "#8ABC2F", "#9A9A9D", "#966047", "#57929e", "#ED582C", "#434352", "#294233", "#8EBF00", "#6F659D"];
+
+
 export const MainPage = () => {
     const location = useLocation();
     const [owner, setOwner] = useState();
@@ -124,7 +127,7 @@ export const MainPage = () => {
                         return (
                             <Line
                                 points={elem}
-                                color={index === 0 ? "red" : index === 1 ? "blue" : index === 2 ? "green" : "yellow"}
+                            color={chatcolors[index]}
                             />
                         );
                     })}
@@ -133,8 +136,7 @@ export const MainPage = () => {
                         return (
                             <StationList
                                 points={elem}
-                                color={index === 0 ? "red" : index === 1 ? "blue" : index === 2 ? "green" : "yellow"}
-                                onHoverPoint={(p) => setHoverPoint(p)}
+                            color={chatcolors[index]}
                             />
                         );
                     })}
