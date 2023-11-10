@@ -1,0 +1,6 @@
+.station {
+    cursor: pointer;
+    width: 35vh;
+    height: 35vh;
+    border-radius: 35vh;
+}
