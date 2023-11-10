@@ -4,39 +4,39 @@ import Station from "./Station";
 import "./Station.css";
 
 const StationList = (props) => {
-    const [stationInfo, setStationInfo] = useState();
-    const [stationDiv, setStationDiv] = useState();
+  const [stationInfo, setStationInfo] = useState();
+  const [stationDiv, setStationDiv] = useState();
 
-    useEffect(() => {
-        setStationInfo(getPRdata());
-    }, []);
+  useEffect(() => {
+    setStationInfo(getPRdata());
+  }, []);
 
-    useEffect(() => {
-        console.log(stationInfo);
-        let stations = [];
-        stationInfo &&
-            stationInfo.map((station, index) => {
-                stations.push(
-                    <Station
-                        key={station.id}
-                        link={station.html_url}
-                        px={props.points[index][0]}
-                        py={props.points[index][1]}
-                        prTitle={station.title}
-                        strokeColor="red"
-                        body={station.body}
-                        assignees={station.assignees}
-                        created_at={station.created_at}
-                        draft={station.draft}
-                        state={station.state}
-                    />
-                );
-            });
+  useEffect(() => {
+    console.log(stationInfo);
+    let stations = [];
+    stationInfo &&
+      stationInfo.map((station, index) => {
+        stations.push(
+          <Station
+            key={station.id}
+            link={station.html_url}
+            px={props.points[index][0]}
+            py={props.points[index][1]}
+            prTitle={station.title}
+            strokeColor="red"
+            body={station.body}
+            assignees={station.assignees}
+            created_at={station.created_at}
+            draft={station.draft}
+            state={station.state}
+          />
+        );
+      });
 
-        setStationDiv(stations);
-    }, [stationInfo]);
+    setStationDiv(stations);
+  }, [stationInfo]);
 
-    return <>{stationDiv}</>;
+  return <>{stationDiv}</>;
 };
 
 export default StationList;
