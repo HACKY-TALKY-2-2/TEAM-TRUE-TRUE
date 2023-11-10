@@ -18,7 +18,7 @@ class PR(BaseModel):
     url: str
     draft: bool
     head: dict
-    base: dict
+    state: str
 
 class CommitDetail(BaseModel):
     message: str
