@@ -3,10 +3,9 @@ import random
 from model import PR, PRCoord
 from time import sleep
 
-seed = "1A13222212K"
-init_location_sigma = 10
-jump_path = 15
-merge_criteria = 5
+init_location_sigma = 30
+jump_path = 45
+merge_criteria = 15
 
 def polar_to_cartesian(r, theta):
     x = r * math.cos(math.pi * theta / 180)
@@ -22,7 +21,7 @@ def randomize_coordinate(x, y, range):
 
     return randomized_x, randomized_y
 
-def generate_coords(prs, users):
+def generate_coords(prs, users, seed="seed"):
     width, height = 400, 400
     center = (width/2, height/2)
     radius = (width ** 2 + height ** 2) ** 0.5 / 2
