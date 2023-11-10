@@ -3,7 +3,7 @@ import random
 from model import PR, PRCoord
 from time import sleep
 
-init_location_sigma = 30
+init_location_sigma = 100
 jump_path = 45
 merge_criteria = 15
 
@@ -28,7 +28,7 @@ def generate_coords(prs, users, seed="seed"):
 
     random.seed(seed)
     personcnt = len(users)
-    path = [([(0, 0)], random.uniform(0, math.pi)) for i in range(personcnt)]
+    path = [([(random.uniform(-init_location_sigma, init_location_sigma), random.uniform(-init_location_sigma, init_location_sigma))], random.uniform(0, math.pi)) for i in range(personcnt)]
     all_points = []
     for pa in path:
         for p in pa[0]:
@@ -44,7 +44,17 @@ def generate_coords(prs, users, seed="seed"):
 
     def next_point(src_point, slope, distance, all_points = []):
       next = (src_point[0] + distance * math.cos(slope), src_point[1] + distance * math.sin(slope))
-      return find_any_close_point(next, merge_criteria, all_points)
+      newNext = [0, 0]
+      if (abs(next[0] - src_point[0]) > 10 * abs(next[1] - src_point[1])):
+        newNext[1] = src_point[1]
+        newNext[0] = next[0]
+      elif (abs(next[1] - src_point[1]) > 10 * abs(next[0] - src_point[0])):
+        newNext[0] = src_point[0]
+        newNext[1] = next[1]
+      else:
+        newNext = list(next)
+    
+      return find_any_close_point(tuple(newNext), merge_criteria, all_points)
 
     def get_next_point(personindex, path):
         path_comp = path[personindex][0]
