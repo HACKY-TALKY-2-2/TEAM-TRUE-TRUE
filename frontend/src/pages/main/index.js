@@ -1,6 +1,4 @@
-const middle = ({ p1, p2 }) => {
-  return p1 > p2 ? (p1 - p2) / 2 : (p2 - p1) / 2;
-};
+import StationList from "../../components/station/StationList";
 
 export const Line = ({ points, color }) => {
   return points.map((elem, i) => {
@@ -53,28 +51,13 @@ export const Line = ({ points, color }) => {
   });
 };
 
-export const Circle = ({ point }) => {
-  return (
-    <>
-      <circle
-        cx="726.233"
-        cy="814.867"
-        fill="#FFFFFF"
-        id="역_방화"
-        r="5"
-        stroke="#8936E0"
-        stroke-miterlimit="10"
-        stroke-width="2"
-      ></circle>
-    </>
-  );
-};
 
 export const MainPage = () => {
   return (
     <div>
       <svg height="1800" width="1000">
         <Line
+        <StationList />
           points={[
             [0.3083684532534876, 0.215042519790858],
 
@@ -102,7 +85,6 @@ export const MainPage = () => {
           ]}
           color={"red"}
         />
-        <Circle point={[400, 1000]} />
       </svg>
     </div>
   );
