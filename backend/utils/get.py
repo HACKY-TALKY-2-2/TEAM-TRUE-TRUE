@@ -5,14 +5,21 @@ import json
 from dotenv import load_dotenv
 
 load_dotenv()
-
 token = os.getenv("GITHUB_SECRET")
+headers = {
+    "Accept" : "application/vnd.github+json",
+    "Authorization": "Bearer " + token,
+}
 
 def getPRs(owner, repo):
     page = 1
     result = []
     while True:
-        temp = requests.get("https://api.github.com/repos/{}/{}/pulls?page={}".format(owner, repo, page), headers={"Authorization": "Bearer " + token}).json()
+        temp = requests.get("https://api.github.com/repos/{}/{}/pulls?page={}&state=all&per_page=100".format(owner, repo, page), headers=headers)
+        if temp.status_code != 200 or temp is dict:
+            print(temp.json())
+            return []
+        temp = temp.json()
         if len(temp) == 0:
             break
         result.extend(temp)
@@ -25,7 +32,12 @@ def getPRbyBranch(owner, repo, branch):
     result = []
 
     while True:
-        temp = requests.get("https://api.github.com/repos/{}/{}/pulls?page={}&base={}".format(owner, repo, page, branch), headers={"Authorization": "Bearer " + token}).json()
+        temp = requests.get("https://api.github.com/repos/{}/{}/pulls?page={}&base={}&state=all&per_page=100".format(owner, repo, page, branch), headers=headers)
+        if temp.status_code != 200 or temp is dict:
+            print(temp.json())
+            return []
+        temp = temp.json()
+        
         if len(temp) == 0:
             break
         result.extend(temp)
@@ -37,7 +49,11 @@ def getCommits(owner, repo, pr_number):
     page = 1
     result = []
     while True:
-        temp = requests.get("https://api.github.com/repos/{}/{}/pulls/{}/commits?page={}".format(owner, repo, pr_number, page), headers={"Authorization": "Bearer " + token}).json()
+        temp = requests.get("https://api.github.com/repos/{}/{}/pulls/{}/commits?page={}&per_page=100".format(owner, repo, pr_number, page), headers=headers)
+        if temp.status_code != 200:
+            print(temp.json())
+            return []
+        temp = temp.json()
         if len(temp) == 0:
             break
         result.extend(temp)

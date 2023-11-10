@@ -1,13 +1,14 @@
 from pydantic import BaseModel, Field
+from typing import Optional
 from .PR import User
 
 class Plan(BaseModel):
     name: str
-    description: str = None
+    description: Optional[str] = None
     author: User
     repo: str
     owner: str
-    branch: str = None
+    branch: Optional[str] = None
     count: int = 0
     is_active: bool = True
 
