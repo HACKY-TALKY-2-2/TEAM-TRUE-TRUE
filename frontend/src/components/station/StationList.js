@@ -5,18 +5,30 @@ import { getPRDatas } from "../../api/Station";
 import "./Station.css";
 
 const StationList = (props) => {
-  const [stationInfo, setStationInfo] = useState();
-  const [stationDiv, setStationDiv] = useState();
+    const [stationInfo, setStationInfo] = useState();
+    const [stationDiv, setStationDiv] = useState();
+
+    // useEffect(() => {
+    //     setStationInfo(getPRdata());
+    //     // getPRDatas("sparcs-kaist", "taxi-app").then((res) => {
+    //     //     console.log(res);
+    //     //     setStationInfo(res);
+    //     // });
+    // }, []);
 
     useEffect(() => {
-        getPRDatas("sparcs-kaist", "taxi-app").then((res) => {
-            console.log(res);
-            setStationInfo(res);
-        });
-    }, []);
+        console.log(props.owner, props.repo);
+        props.owner &&
+            props.repo &&
+            getPRDatas(props.owner, props.repo).then((res) => {
+                console.log(res);
+                setStationInfo(res);
+            });
+    }, [props.owner, props.repo]);
 
     useEffect(() => {
-        console.log(stationInfo);
+        // console.log(props.color);
+        // console.log(props.points);
         let stations = [];
         stationInfo &&
             stationInfo.map((station, index) => {
@@ -24,10 +36,10 @@ const StationList = (props) => {
                     <Station
                         key={station.id}
                         link={station.html_url}
-                        px={props.points[index][0] ? props.points[index][0] : 0}
-                        py={props.points[index][1] ? props.points[index][1] : 0}
+                        px={props.points[index] ? props.points[index][0] : -1}
+                        py={props.points[index] ? props.points[index][1] : -1}
                         prTitle={station.title}
-                        strokeColor="red"
+                        strokeColor={props.color}
                         body={station.body}
                         assignees={station.assignees}
                         created_at={station.created_at}
@@ -37,10 +49,10 @@ const StationList = (props) => {
                 );
             });
 
-    setStationDiv(stations);
-  }, [stationInfo]);
+        setStationDiv(stations);
+    }, [stationInfo]);
 
-  return <>{stationDiv}</>;
+    return <>{stationDiv}</>;
 };
 
 export default StationList;

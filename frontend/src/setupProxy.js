@@ -5,6 +5,10 @@ module.exports = function (app) {
         createProxyMiddleware("/pull", {
             target: "https://shark-careful-walleye.ngrok-free.app",
             changeOrigin: true,
+        }),
+        createProxyMiddleware("/point", {
+            target: "https://shark-careful-walleye.ngrok-free.app",
+            changeOrigin: true,
         })
     );
 };
