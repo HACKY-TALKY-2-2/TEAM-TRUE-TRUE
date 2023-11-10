@@ -5,7 +5,7 @@ from pydantic import BaseModel
 class User(BaseModel):
     id: int
     login: str
-    avatar_url: str
+    avatar_url: str = None
 
 class PR(BaseModel):
     id: int
