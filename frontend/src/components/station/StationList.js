@@ -36,11 +36,11 @@ const StationList = (props) => {
                     state={station.pr.state}
                     onHover={(p) =>
                         p
-                            ? props.onHoverPoint({
+                            ? props?.onHoverPoint({
                                   point: props.points[index],
                                   station: station.pr,
                               })
-                            : props.onHoverPoint(null)
+                            : props?.onHoverPoint(null)
                     }
                 />
             );
